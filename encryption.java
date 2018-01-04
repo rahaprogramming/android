@@ -23,11 +23,16 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 
 /************************************************************
- * @author Ralph Harris
+ * @Author Ralph Harris
  * This is a very useful class for storing passwords. It will 
- encrypt a string. usage:
- 
- String encryptedString = new encryption().encrypt("secret message or password");
+ * encrypt a string. 
+ * usage:
+ *
+ * String encryptedString = new encryption().encrypt("secret message or password");
+ *
+ * note: I have never had a need to decrypt a pass as I authenticate by simply re-encrypting 
+ * the entered pass. However, if you have a need for this, contact me at rahaprogramming@gmail.com
+ * and i'll write it for you.
  ***********************************************************/
 
 
