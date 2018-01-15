@@ -24,14 +24,14 @@ public String getFileName(Uri uri) {
   return result;
 }
 //Decode base64 to bitmap
- private Bitmap decodeFromBase64ToBitmap(String encodedImage){
+ public Bitmap decodeFromBase64ToBitmap(String encodedImage){
     byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     return decodedByte;
     }
 
 //Convert image to Base64 String
-    private String convertToBase64(String imagePath){
+    public String convertToBase64(String imagePath){
       Bitmap bm = BitmapFactory.decodeFile(imagePath);
       ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
       bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); 
