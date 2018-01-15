@@ -1,0 +1,42 @@
+public class utils{
+
+
+//uri to String filename path
+public String getFileName(Uri uri) {
+  String result = null;
+  if (uri.getScheme().equals("content")) {
+    Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+    try {
+      if (cursor != null && cursor.moveToFirst()) {
+        result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+      }
+    } finally {
+      cursor.close();
+    }
+  }
+  if (result == null) {
+    result = uri.getPath();
+    int cut = result.lastIndexOf('/');
+    if (cut != -1) {
+      result = result.substring(cut + 1);
+    }
+  }
+  return result;
+}
+//Decode base64 to bitmap
+ private Bitmap decodeFromBase64ToBitmap(String encodedImage){
+    byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+    return decodedByte;
+    }
+
+//Convert image to Base64 String
+    private String convertToBase64(String imagePath){
+      Bitmap bm = BitmapFactory.decodeFile(imagePath);
+      ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+      bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); 
+      byte[] byteArrayImage = baos.toByteArray();
+      String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+      return encodedImage;
+    }
+}
