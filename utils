@@ -20,43 +20,65 @@ ImageView iv){
   
   return false;
 }
-
-//uri to String filename path
-public String getFileName(Uri uri) {
-  String result = null;
-  if (uri.getScheme().equals("content")) {
-    Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-    try {
-      if (cursor != null && cursor.moveToFirst()) {
-        result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-      }
-    } finally {
-      cursor.close();
-    }
-  }
-  if (result == null) {
-    result = uri.getPath();
-    int cut = result.lastIndexOf('/');
-    if (cut != -1) {
-      result = result.substring(cut + 1);
-    }
-  }
-  return result;
-}
-//Decode base64 to bitmap
- public Bitmap decodeFromBase64ToBitmap(String encodedImage){
-    byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-    return decodedByte;
-    }
-
-//Convert image to Base64 String
+ //Convert image to Base64 String
     public String convertToBase64(String imagePath){
-      Bitmap bm = BitmapFactory.decodeFile(imagePath);
-      ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
-      bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); 
-      byte[] byteArrayImage = baos.toByteArray();
-      String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
-      return encodedImage;
+        Bitmap bm = BitmapFactory.decodeFile(imagePath);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 01, baos);
+        byte[] byteArrayImage = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+        return encodedImage;
+    }
+    //Decode base64 to bitmap
+    public Bitmap decodeFromBase64ToBitmap(String encodedImage){
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return decodedByte;
+    }
+    //uri to String filename only
+    public String getFileName (Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
+    }
+    //uri to String filename with full path
+    public String getFilePath(Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = uri.getPath();
+                    result += cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 }
