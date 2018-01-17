@@ -1,8 +1,19 @@
 public class utils{
 
+//convert px to dp
+public static float convertPixelsToDp(float px){
+	  DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+	  float dp = px / (metrics.densityDpi / 160f);
+	  return Math.round(dp);
+}
+	//convert dp to px
+public static float convertDpToPixel(float dp){
+	  DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+	  float px = dp * (metrics.densityDpi / 160f);
+	  return Math.round(px);
+ }
 // load image from url
-public boolean loadImageFromURL(String fileUrl, 
-ImageView iv){
+public boolean loadImageFromURL(String fileUrl, ImageView iv){
   try {
     URL myFileUrl = new URL (fileUrl);
     HttpURLConnection conn =
