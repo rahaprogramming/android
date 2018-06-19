@@ -12,19 +12,22 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.squareup.picasso.Transformation;
-
 import static android.graphics.Color.GRAY;
 import static android.graphics.Color.RED;
 import static android.graphics.Color.TRANSPARENT;
 import static android.graphics.Color.green;
 
+
+/*@Author Ralph Harris 6/18/2018
+*class to transform a String url photo into a map marker shape 
+*/
+//Usage: Picasso.get().Load(stringUrl).Transform( new profileMarkerTransformation() ).into(view);
 public class profileMarkerTransformation implements Transformation {
     private Paint paint;
-    private RectF oval;
-    private Path fillPath;
-    private Path strokeFillPath;
+    private RectF oval;//top half of marker
+    private Path fillPath;//bottom half of marker
+    private Path strokeFillPath;//for the stroke - Dont stroke through the middle!
 
     @Override
     public Bitmap transform(Bitmap source) {
