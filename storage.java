@@ -35,4 +35,42 @@ public class storage extends Activity {
         fis.close();
         return line;
     }
+    
+    //here's another method. slower but safer
+    public static Bitmap loadBitmap(Context context, String picName){ 
+    Bitmap b = null; 
+    FileInputStream fis; 
+    try { 
+        fis = context.openFileInput(picName); 
+        b = BitmapFactory.decodeStream(fis);   
+    }  
+    catch (FileNotFoundException e) { 
+        Log.d(TAG, "file not found"); 
+        e.printStackTrace(); 
+    }  
+    catch (IOException e) { 
+        Log.d(TAG, "io exception"); 
+        e.printStackTrace(); 
+    } finally {
+        fis.close();
+    }
+    return b; 
+    } 
+    public static void saveFile(Context context, Bitmap b, String picName){ 
+    FileOutputStream fos; 
+    try { 
+        fos = context.openFileOutput(picName, Context.MODE_PRIVATE); 
+        b.compress(Bitmap.CompressFormat.PNG, 100, fos);  
+    }  
+    catch (FileNotFoundException e) { 
+        Log.d(TAG, "file not found"); 
+        e.printStackTrace(); 
+    }  
+    catch (IOException e) { 
+        Log.d(TAG, "io exception"); 
+        e.printStackTrace(); 
+    } finally {
+        fos.close();
+    }
+}
 }
