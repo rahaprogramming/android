@@ -1,4 +1,12 @@
 public class utils{
+//get day of week
+public String getDay(){
+    String daysArray[] = {"Sun","Mon","Tue", "Wed","Thu","Fri", "Sat"};
+    Calendar calendar = Calendar.getInstance();
+    int day = calendar.get(Calendar.DAY_OF_WEEK);
+
+    return daysArray[day];
+}
 
 //convert px to dp
 public static float convertPixelsToDp(float px){
