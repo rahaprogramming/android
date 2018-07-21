@@ -100,4 +100,110 @@ public boolean loadImageFromURL(String fileUrl, ImageView iv){
         }
         return result;
     }
+    
+   //get useful permissions as array
+   public static final String[] PERMISSIONS = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+   
+   //timestamp
+   public static long getTimestamp(){
+        return System.currentTimeMillis() / 1000;
+   }
+
+   //Friday may 6, 2025
+   public static String getLongDayName(long timestamp) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+        return simpleDateFormat.format(new Date(timestamp * 1000));
+   }
+
+   //Fri
+    public static String getShortDayName(long timestamp) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E", Locale.getDefault());
+        return simpleDateFormat.format(new Date(timestamp * 1000));
+    }
+
+  //no comments forthese common sense methods
+  
+  public static int randInt(Random random, int min, int max) {
+        return random.nextInt((max - min) + 1) + min;
+    }
+
+    public static void checkRunningThread(String TAG) {
+        Log.e(TAG, "Running in thread: " + Thread.currentThread().toString());
+    }
+
+    public static boolean isWifiON(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting() && activeNetwork.getType() == ConnectivityManager.TYPE_WIFI && Utils.isOnline();
+    }
+
+    public static boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+ public static void createNotification(Context context, String message) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        PendingIntent pIntent = PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, 0);
+
+        // Build notification
+        // Actions are just fake
+        Notification noti = new Notification.Builder(context)
+                .setAutoCancel(true)
+                .setContentTitle("Snap")
+                .setContentText(message)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE)
+                .setContentIntent(pIntent)
+                .build();
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        // hide the notification after its selected
+        noti.flags |= Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(0, noti);
+    }
+
+    public static boolean checkIfGpsIsOn(Context context) {
+        return ((LocationManager) context.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    public static String returnAddress(Geocoder geocoder, double latitude, double longitude) {
+        String address = String.valueOf(latitude) + " / " + String.valueOf(longitude);
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses.size() > 0) {
+                address = "";
+                for (int i = 0; i < addresses.get(0).getMaxAddressLineIndex(); i++) {
+                    if (i != addresses.get(0).getMaxAddressLineIndex() - 1)
+                        address += addresses.get(0).getAddressLine(i) + "\n";
+                    else
+                        address += addresses.get(0).getAddressLine(i);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return address;
+    }
+
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }
