@@ -1,4 +1,25 @@
 public class utils{
+//get Activity from Context
+//unpacks ContextWrapper recursively or returns null if it fails
+public Activity getActivity(Context context){
+    if (context == null)
+    {
+        return null;
+    }
+    else if (context instanceof ContextWrapper)
+    {
+        if (context instanceof Activity)
+        {
+            return (Activity) context;
+        }
+        else
+        {
+            return getActivity(((ContextWrapper) context).getBaseContext());
+        }
+    }
+
+    return null;
+}
 //get day of week
 public String getDay(){
     String daysArray[] = {"Sun","Mon","Tue", "Wed","Thu","Fri", "Sat"};
